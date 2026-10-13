@@ -1,0 +1,10 @@
+# @package _global_
+defaults:
+- _self_
+- /common
+
+# One entry per level
+codebook_sizes: [256, 256, 256, 256]
+seed: 0
+
+num_cpus: 8

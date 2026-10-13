@@ -1,0 +1,23 @@
+# @package _global_
+
+task_name: SASRec
+
+model:
+  net: 
+    _target_: src.models.sasrec.SASRec
+    n_layers: 2
+    d_model: 128
+    d_head: 64
+    # item_encoder : set by the item_encoder config group
+    dropout: 0.4
+    seq_len: ${data.ray_datasets.prepro_cfg.crop_length}
+    criterion:
+      _target_: src.models.sasrec.SampledSoftmax
+      temperature: 0.05
+      n_items: 30000
+  optimizer: 
+    lr: 0.0005
+    weight_decay: 0. 
+  scheduler: 
+    warmup_steps: 2000
+

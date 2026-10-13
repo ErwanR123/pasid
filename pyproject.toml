@@ -1,0 +1,48 @@
+[project]
+name = "pasid"
+version = "0.1.0"
+description = "Popularity-Aware Semantic IDs for sequential recommendation, built on the COSETTE & MARIUS code of Lepage et al. (arXiv:2508.14910)"
+authors = [{ name = "Erwan Ouabdesselam" }]
+license = { file = "LICENSE" }
+requires-python = ">=3.11"
+# Versions of the Ray cluster image the experiments ran on
+dependencies = [
+    "fsspec==2025.10.0",
+    "hydra-core==1.3.4",
+    "lightning==2.6.5",
+    "numpy==1.26.4",
+    "pandas==2.3.3",
+    "pyarrow==15.0.2",
+    "ray==2.51.1",
+    "scikit-learn==1.9.0",
+    "torch==2.12.1",
+    # Missing from the image, installed per job by submit.py
+    "huggingface_hub==0.36.2",
+    "optuna==5.0.0",
+    "sentence-transformers==2.7.0",
+    "transformers==4.42.4",
+    "wandb==0.19.7",
+]
+
+[project.optional-dependencies]
+dev = ["pytest", "ruff"]
+
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["src*"]
+
+[tool.pytest.ini_options]
+# This file makes the repo root pytest's rootdir : it does not climb to a parent conftest
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "--import-mode=importlib"
+
+[tool.ruff]
+line-length = 88  # black's default, the style of the original code
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]  # errors, pyflakes, import order
+ignore = ["E501"]  # line length is the formatter's job, as with black

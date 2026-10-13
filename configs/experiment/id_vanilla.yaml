@@ -1,0 +1,32 @@
+# @package _global_
+# The original SASRec on item ids : binary cross-entropy with one uniform negative per
+# position, dot product without L2 normalization, the last 50 items of each timeline
+# without random crops nor shuffled ties. Same Transformer, budget and schedule as SASRec++
+# (experiment/sasrec.yaml, not inherited : its criterion has other arguments).
+# Hyperparameters : the first trial of the tuning (tune.py), the tuned ones are in
+# configs/tuned.yaml
+defaults:
+  - override /item_encoder: id
+
+task_name: SASRec
+
+model:
+  net:
+    _target_: src.models.sasrec.SASRec
+    n_layers: 2
+    d_model: 128
+    d_head: 64
+    dropout: 0.2
+    seq_len: ${data.ray_datasets.prepro_cfg.crop_length}
+    normalize: false
+    criterion:
+      _target_: src.models.sasrec.BinaryCrossEntropy
+  optimizer:
+    lr: 0.001
+    weight_decay: 1.0e-6 # the lower bound of the search : none, as the original SASRec
+  scheduler:
+    warmup_steps: 2000
+
+data:
+  datamodule:
+    augment: false

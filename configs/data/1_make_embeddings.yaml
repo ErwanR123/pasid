@@ -1,0 +1,16 @@
+# @package _global_
+defaults:
+- _self_
+- /common
+
+model_folder: sentence-transformers/sentence-t5-xl # written as dataset.emb_method
+force: true
+
+num_gpus: 1
+device: cuda
+batch_size: 32
+# Content ablation : keep the first max_chars characters of the text of each item, written
+# under another dataset.emb_method (e.g. sentence-t5-xl_chars50). null : the whole text
+max_chars: null
+# Content ablation : a random fraction of the items (seed 0) gets an empty text. null : none
+empty_fraction: null

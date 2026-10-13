@@ -1,0 +1,14 @@
+# @package _global_
+# Semantic IDs only : RQ-KMeans 256x4, no disambiguation
+# Hyperparameters : the first trial of the tuning (tune.py), the tuned ones are in
+# configs/tuned.yaml
+defaults:
+  - sasrec
+  - override /item_encoder: sid
+sid_candidate: rqkmeans_256-256-256-256
+model:
+  optimizer:
+    lr: 0.00156
+    weight_decay: 0.00242
+  net:
+    dropout: 0.106

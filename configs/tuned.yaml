@@ -1,0 +1,61 @@
+# Best hyperparameters of the tuning (tune.py), per category, model dimension and arm,
+# read by campaign.py : the values of the runs of the paper. Best of 45 trials, except
+# Sports d128 id and Toys d256 sid5 (best of the first 30 : a seed diverged with the best
+# of 45). id_vanilla : 30 trials. An entry can also set its sid_candidate.
+Toys_and_Games:
+  d128:
+    id: {lr: 0.00195, weight_decay: 0.286, dropout: 0.591}
+    sid: {lr: 0.00634, weight_decay: 0.035, dropout: 0.079}
+    sid5: {lr: 0.0067, weight_decay: 0.0369, dropout: 0.0461}
+    pasid: {lr: 0.0049, weight_decay: 0.001, dropout: 0.135}
+    id_vanilla: {lr: 0.000967, weight_decay: 0.68, dropout: 0.246}
+  d256:
+    id: {lr: 0.00115, weight_decay: 0.0516, dropout: 0.612}
+    sid: {lr: 0.00676, weight_decay: 0.0381, dropout: 0.214}
+    sid5: {lr: 0.00655, weight_decay: 0.0183, dropout: 0.251}
+    pasid: {lr: 0.00841, weight_decay: 0.111, dropout: 0.227}
+    id_vanilla: {lr: 0.00044, weight_decay: 0.68, dropout: 0.246}
+  d512:
+    id: {lr: 0.000405, weight_decay: 0.00026, dropout: 0.62}
+    sid: {lr: 0.00408, weight_decay: 0.00202, dropout: 0.307}
+    sid5: {lr: 0.00716, weight_decay: 0.0784, dropout: 0.369}
+    pasid: {lr: 0.00061, weight_decay: 6.38e-06, dropout: 0.397}
+    id_vanilla: {lr: 0.00044, weight_decay: 0.68, dropout: 0.246}
+Sports_and_Outdoors:
+  d128:
+    id: {lr: 0.002, weight_decay: 6.81e-05, dropout: 0.651}
+    sid: {lr: 0.00747, weight_decay: 0.0338, dropout: 0.113}
+    sid5: {lr: 0.00953, weight_decay: 0.0307, dropout: 0.0563}
+    pasid: {lr: 0.0123, weight_decay: 0.0795, dropout: 0.124}
+    id_vanilla: {lr: 0.00103, weight_decay: 1.45, dropout: 0.415}
+  d256:
+    id: {lr: 0.00118, weight_decay: 0.00106, dropout: 0.641}
+    sid: {lr: 0.00445, weight_decay: 1.79e-06, dropout: 0.207}
+    sid5: {lr: 0.00201, weight_decay: 4.54e-05, dropout: 0.19}
+    pasid: {lr: 0.000784, weight_decay: 0.00233, dropout: 0.203}
+    id_vanilla: {lr: 0.000887, weight_decay: 1.47, dropout: 0.343}
+  d512:
+    id: {lr: 0.00073, weight_decay: 9.16e-05, dropout: 0.666}
+    sid: {lr: 0.000624, weight_decay: 0.000302, dropout: 0.291}
+    sid5: {lr: 0.000588, weight_decay: 0.00153, dropout: 0.274}
+    pasid: {lr: 0.000519, weight_decay: 1.3e-06, dropout: 0.333}
+    id_vanilla: {lr: 0.000399, weight_decay: 1.58, dropout: 0.355}
+Beauty_and_Personal_Care:
+  d128:
+    id: {lr: 0.000795, weight_decay: 0.169, dropout: 0.488}
+    sid: {lr: 0.00375, weight_decay: 0.0514, dropout: 0.0634}
+    sid5: {lr: 0.00391, weight_decay: 0.0509, dropout: 0.0268}
+    pasid: {lr: 0.00319, weight_decay: 0.0945, dropout: 0.0724}
+    id_vanilla: {lr: 0.000537, weight_decay: 0.857, dropout: 0.552}
+  d256:
+    id: {lr: 0.000573, weight_decay: 0.0777, dropout: 0.549}
+    sid: {lr: 0.00418, weight_decay: 0.0622, dropout: 0.169}
+    sid5: {lr: 0.00228, weight_decay: 0.0974, dropout: 0.146}
+    pasid: {lr: 0.00731, weight_decay: 0.0519, dropout: 0.172}
+    id_vanilla: {lr: 0.000363, weight_decay: 1.01, dropout: 0.309}
+  d512:
+    id: {lr: 0.000269, weight_decay: 0.0361, dropout: 0.593}
+    sid: {lr: 0.000712, weight_decay: 5.27e-05, dropout: 0.254}
+    sid5: {lr: 0.000497, weight_decay: 5.03e-05, dropout: 0.317}
+    pasid: {lr: 0.000433, weight_decay: 6.78e-05, dropout: 0.25}
+    id_vanilla: {lr: 0.000626, weight_decay: 1.79, dropout: 0.438}

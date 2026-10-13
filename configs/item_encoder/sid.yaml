@@ -1,0 +1,10 @@
+# @package model.net.item_encoder
+# Concat-MLP encoder on the codes of the top-level sid_candidate
+_target_: src.models.item_encoders.sid_encoder
+paths: ${paths}
+category: ${dataset.category}
+d_model: ${model.net.d_model}
+emb_method: ${dataset.emb_method}
+quant_method: ${sid_candidate}
+# Hidden dims, in multiples of d_model : Q * d -> 4d -> 2d -> d, down to d at every d_model
+mlp_hidden_widths: [4, 2]

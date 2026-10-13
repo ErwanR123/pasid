@@ -1,0 +1,6 @@
+defaults:
+- _self_
+- common
+
+prefix: ??? # first characters of the run names, e.g. tune or final
+split: valid # valid : logged during training | test : written by src/test.py

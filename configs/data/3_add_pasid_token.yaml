@@ -1,0 +1,9 @@
+# @package _global_
+defaults:
+- _self_
+- /common
+
+source: rqkmeans_256-256-256-256 # quant_method of the input SIDs
+name: pasid # output : <source>_<name>, the sid_candidate of experiment/pasid.yaml
+
+head_fraction: 0.01 # items with a value of p of their own

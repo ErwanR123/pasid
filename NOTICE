@@ -1,0 +1,41 @@
+PASID - Popularity-Aware Semantic IDs
+
+This repository is a fork of COSETTE & MARIUS, by Simon Lepage, Jérémie Mary and
+David Picard (Criteo AI Lab & ENPC) :
+    https://github.com/Simon-Lepage/cosette_and_marius
+    commit b5a1f3a7650edd2a0f00feec67831a1ec1323f5f
+Most of the code (data pipeline, SASRec++, training and evaluation) comes from it.
+It is distributed under the Apache License 2.0, see LICENSE.
+
+If you use this code, please also cite the original work :
+    Lepage, Mary, Picard. Closing the Performance Gap in Generative Recommenders
+    with Collaborative Tokenization and Efficient Modeling. arXiv:2508.14910, 2025.
+
+Changes made to the original repository :
+
+Removed : COSETTE and MARIUS (models, data processing, scripts, configs, assets),
+    requirements.txt and setup.py (replaced by pyproject.toml),
+    src/utils/ranked_logger.py (Lightning's rank_zero_info, log_hyperparameters in src/train.py),
+    src/data/augment.py (training crops and shuffles moved to src/data/datamodule.py, on GPU).
+
+Modified :
+    data_scripts/0_raw_to_parquet.py, data_scripts/1_make_embeddings.py
+    src/train.py, src/test.py, src/lightning_module.py
+    src/models/__init__.py, src/models/sasrec.py
+    src/data/ray_data.py, src/data/sasrec.py, src/data/datamodule.py
+    src/utils/callbacks.py, src/utils/scheduler.py, src/utils/tools.py
+    configs/train.yaml, configs/test.yaml, configs/data/0_raw_to_parquet.yaml,
+    configs/data/1_make_embeddings.yaml, configs/experiment/sasrec.yaml
+    configs/paths.yaml, configs/disable_hydra_dirs.yaml : merged into configs/common.yaml
+
+Added :
+    data_scripts/2_train_rqkmeans.py, data_scripts/3_add_pasid_token.py
+    src/models/item_encoders.py, src/collect_results.py
+    configs/common.yaml, configs/tune.yaml, configs/tuned.yaml, configs/campaign.yaml, configs/data/2_train_rqkmeans.yaml, configs/data/3_add_pasid_token.yaml,
+    configs/collect_results.yaml, configs/item_encoder/, configs/experiment/{id,id_vanilla,sid,sid5,pasid}.yaml
+    submit.py, tune.py, campaign.py, tests/, docs/, pyproject.toml
+
+Fixed : the training loss (src/models/sasrec.py) ignores the left padding of the timelines,
+    which made about 89 % of its terms, and samples its negatives among the real items.
+
+Unchanged : every other file.

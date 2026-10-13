@@ -1,0 +1,37 @@
+# @package _global_
+# Shared by every script : the dataset, the paths, and no Hydra output folders
+defaults:
+  - _self_
+  - override hydra/hydra_logging: disabled
+  - override hydra/job_logging: stdout
+
+hydra:
+  output_subdir: null
+  run:
+    dir: .
+
+# The dataset all the steps work on : override it once with dataset.category=...
+dataset:
+  category: Toys_and_Games
+  emb_method: sentence-t5-xl # name of the item embeddings, written by 1_make_embeddings
+
+paths:
+  # Local disk by default. submit.py sets viewfs (HDFS) for the Criteo Ray clusters
+  protocol: file # or anything fsspec.filesystem supports
+  # Base folder, from the PASID_ROOT environment variable (forwarded to the jobs by
+  # submit.py). On the Criteo Ray clusters the pods can only write under /user/<user>/ray
+  root: ${oc.env:PASID_ROOT}
+  # Raw ratings and IDs
+  timelines_tplt: ${.root}/data/timelines/{category}.{split}.parquet
+  # Raw metadata
+  meta_tplt: ${.root}/data/meta/{category}.parquet
+  # Unique items
+  unique_items_tplt: ${.root}/data/timelines/{category}_items.pkl
+  # Embeddings
+  embeddings_tplt: ${.root}/data/embeddings/{emb_method}/{category}/embeddings.parquet
+  # Semantic IDs
+  semantic_ids_tplt: ${.root}/data/embeddings/{emb_method}/{category}/{quant_method}.parquet
+  # Model outputs
+  model_folder_tplt: ${.root}/models/
+  # Logging project
+  wandb_project_name: pasid

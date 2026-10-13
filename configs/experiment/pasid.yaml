@@ -1,0 +1,14 @@
+# @package _global_
+# PASID : Semantic IDs + popularity-aware code p (data_scripts/3_add_pasid_token.py)
+# Hyperparameters : the first trial of the tuning (tune.py), the tuned ones are in
+# configs/tuned.yaml
+defaults:
+  - sasrec
+  - override /item_encoder: sid
+sid_candidate: rqkmeans_256-256-256-256_pasid
+model:
+  optimizer:
+    lr: 0.000552
+    weight_decay: 0.00063
+  net:
+    dropout: 0.18

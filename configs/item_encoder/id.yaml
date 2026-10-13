@@ -1,0 +1,6 @@
+# @package model.net.item_encoder
+# One learned embedding per item id, vocabulary size read from the data
+_target_: src.models.item_encoders.id_encoder
+paths: ${paths}
+category: ${dataset.category}
+d_model: ${model.net.d_model}

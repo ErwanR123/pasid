@@ -1,0 +1,15 @@
+# @package _global_
+# Semantic IDs 256x5 : the 4 codes of sid + a fifth RQ-KMeans level. Control of PASID's
+# fifth code : one more content code instead of the popularity code
+# Hyperparameters : the first trial of the tuning (tune.py), the tuned ones are in
+# configs/tuned.yaml
+defaults:
+  - sasrec
+  - override /item_encoder: sid
+sid_candidate: rqkmeans_256-256-256-256-256
+model:
+  optimizer:
+    lr: 0.00156
+    weight_decay: 0.00242
+  net:
+    dropout: 0.106

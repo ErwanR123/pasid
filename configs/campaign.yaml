@@ -1,0 +1,14 @@
+defaults:
+- _self_
+- common
+
+categories: [Toys_and_Games, Sports_and_Outdoors, Beauty_and_Personal_Care]
+d_models: [128, 256, 512]
+arms: [id, sid, sid5, pasid] # experiment configs, with their tuned hyperparameters
+seeds: [0, 1, 2]
+task_name: final # runs named <task_name>_<category>_<items>_seed<seed>_<date>
+max_parallel: 32 # two runs per GPU worker (16)
+# SID candidates run with the hyperparameters of the arm, e.g. other PASID codes ;
+# null : the candidate of the arm's experiment config
+sid_candidates: null
+overrides: [] # extra overrides of src/train.py for every run, e.g. [sid_candidate=...]

@@ -1,0 +1,24 @@
+defaults:
+- _self_
+- common
+
+categories: [Toys_and_Games, Sports_and_Outdoors, Beauty_and_Personal_Care]
+d_models: [128, 256, 512]
+# Experiment configs to tune. The vanilla SASRec was tuned apart : arms=[id_vanilla] trials=30
+arms: [id, sid, sid5, pasid]
+trials: 45 # per category, dimension and arm
+max_parallel: 32 # two runs per GPU worker (16), shared by all the studies
+seed: 0 # of the TPE samplers
+# Search space per model dimension : the ID arms (id, id_vanilla) and the SID arms (sid,
+# sid5, pasid). Log scale for lr and weight_decay. The ID baseline wants a strong dropout,
+# the SID arms a weak one and a higher lr. No best trial of the paper sits on a bound
+space:
+  128:
+    id: {lr: [6.0e-5, 8.0e-3], weight_decay: [1.0e-6, 2.0], dropout: [0.2, 0.85]}
+    sid: {lr: [4.0e-4, 3.0e-2], weight_decay: [1.0e-6, 2.0], dropout: [0.0, 0.4]}
+  256:
+    id: {lr: [6.0e-5, 2.0e-3], weight_decay: [1.0e-6, 2.0], dropout: [0.2, 0.85]}
+    sid: {lr: [4.0e-4, 2.0e-2], weight_decay: [1.0e-6, 2.0], dropout: [0.0, 0.4]}
+  512:
+    id: {lr: [6.0e-5, 2.0e-3], weight_decay: [1.0e-6, 2.0], dropout: [0.2, 0.85]}
+    sid: {lr: [1.0e-4, 1.5e-2], weight_decay: [1.0e-6, 2.0], dropout: [0.0, 0.6]}

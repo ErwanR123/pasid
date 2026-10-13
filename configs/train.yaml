@@ -1,0 +1,100 @@
+defaults:
+- _self_
+- item_encoder: id # id | sid, fills model.net.item_encoder (an experiment can override it)
+- experiment: ??? # Will override model, data, ...
+- common
+
+# task name, determines output directory path
+task_name: ??? # Overriden by experiment selection
+# SIDs read by item_encoder=sid : <source>_<pasid setup> of data_scripts/3_add_pasid_token.py
+sid_candidate: rqkmeans_256-256-256-256_pasid
+seed: 0
+# Training length, in epochs over the users of the category (an example is a user
+# timeline) : src/train.py turns them into trainer.max_steps. One validation, at the end :
+# the last checkpoint is the model, no selection on a validation curve
+epochs: 50
+
+trainer: 
+  _target_: lightning.pytorch.Trainer
+  accelerator: auto
+  devices: auto
+  strategy:
+    _target_: ray.train.lightning.RayDDPStrategy
+  plugins:
+    _target_: ray.train.lightning.RayLightningEnvironment
+  precision: bf16-mixed
+  check_val_every_n_epoch: null
+  val_check_interval: ??? # set by src/train.py : the last step
+  max_steps: ??? # set by src/train.py from epochs
+  # CALLBACKS
+  callbacks: 
+  - _target_: lightning.pytorch.callbacks.ModelSummary
+    max_depth: -1
+  - _target_: lightning.pytorch.callbacks.LearningRateMonitor
+    logging_interval: step
+    log_momentum: False
+    log_weight_decay: True
+  - _target_: src.utils.callbacks.CustomReportCallback
+  # LOGGING 
+  logger:
+    _target_: lightning.pytorch.loggers.wandb.WandbLogger
+    name: null # Overriden with run name in code
+    project: ${paths.wandb_project_name}
+
+model: # Lightning Module for Training 
+  _target_: src.lightning_module.LitModule
+  net: null # Overriden by experiment selection
+  optimizer: 
+    _target_: torch.optim.AdamW
+    _partial_: true
+    fused: true
+    lr: ??? # Overriden by experiment selection
+    weight_decay: ??? # Overriden by experiment selection
+  scheduler: 
+    _target_: src.utils.scheduler.warmup_cosine
+    _partial_: true
+    warmup_steps: ???
+    cosine_steps: ${eval:'${trainer.max_steps} - ${model.scheduler.warmup_steps}'}
+
+ray: 
+  scaling_config:
+    _target_: ray.train.ScalingConfig
+    num_workers: 1
+    use_gpu: True
+    resources_per_worker:
+      CPU: 1 # The rest is handled by Ray Data
+      # Two runs per GPU : one step leaves the GPU idle most of the time, two runs fill it
+      # (+33 % throughput measured, 2 x 40 it/s against 60 it/s alone)
+      GPU: 0.5
+  run_config:
+    _target_: ray.train.RunConfig
+    storage_path: ${paths.model_folder_tplt}
+    checkpoint_config:
+      _target_: ray.train.CheckpointConfig
+      num_to_keep: 1 # the last one : the model at the end of the fixed budget
+    failure_config:
+      _target_: ray.train.FailureConfig
+      max_failures: 0
+  runtime_env: {}
+
+
+data: 
+  ray_datasets: 
+    _target_: src.data.ray_data.make_ray_dataset
+    category: ${dataset.category}
+    # CPUs of the valid / test preprocessing, read once. The training examples are drawn on
+    # the GPU (src.data.datamodule.TimelineBatches)
+    num_cpus: 2
+    prepro_cfg: # src.data.sasrec.SASRecPrePro, valid and test
+      crop_length: 50
+  datamodule:
+    _target_: src.data.datamodule.RayDataModule
+    # 1024 : the step, not the data, bounds the speed (60k timelines/s on a H200)
+    train_batch_size: 1024
+    valid_batch_size: 1024
+    crop_length: ${data.ray_datasets.prepro_cfg.crop_length}
+    augment: true # random windows and shuffled ties ; false : the last window (id_vanilla)
+
+
+
+    

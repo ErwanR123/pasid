@@ -1,0 +1,13 @@
+# @package _global_
+# SASRec++ baseline : one learned embedding per item
+# Hyperparameters : the first trial of the tuning (tune.py), the tuned ones are in
+# configs/tuned.yaml
+defaults:
+  - sasrec
+  - override /item_encoder: id
+model:
+  optimizer:
+    lr: 0.0002
+    weight_decay: 1.5e-05
+  net:
+    dropout: 0.518
